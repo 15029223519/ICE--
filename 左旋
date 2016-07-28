@@ -1,0 +1,35 @@
+#include<stdio.h>
+#include<stdlib.h>
+char* left_spin(char *left,int num)
+{   char *p=(left+1);
+	int i = 0;
+	char ch = 0;
+	char *q = left;
+	while(i!=num)
+	{
+	    ch=*left;
+	     while(*p!='\0')
+	
+		 { *left=*p;
+			left++;
+			p++;
+		
+	      }
+	*(p-1)=ch;
+	left=q;
+	p=(left+1);
+	i++;
+	}
+return q;
+}
+int main()
+{ char arr[50]={0};
+ char *ret = NULL;
+  int num;
+  gets(arr);
+  scanf("%d",&num);
+  ret=left_spin(arr,num);
+  printf("%s",ret);
+	system("pause");
+	return 0;
+}
