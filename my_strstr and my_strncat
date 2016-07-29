@@ -1,0 +1,83 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+char *my_strstr(const char *str,const char*substr)
+{ 
+	 char *p = NULL;
+	 char *q = NULL;
+	assert(str != NULL && substr != NULL);
+    
+    while(*str!='\0')
+   {    p = str;
+	    q = substr;
+	  while(*str==*substr)
+	  {
+		  str++;
+		  substr++;
+	  }
+	  if(*substr =='\0')
+		  return p;
+	  else
+	  {
+		  str = p;
+	      substr = q;
+	  }
+		  if(*str!='\0')
+			  str++;
+
+  }
+	return NULL;
+  }
+int main()
+{
+	char arr[50] = "we are happpy.";
+	char arr1[50] = "pppy";
+	char *ret = NULL;
+	ret = my_strstr(arr,arr1);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+
+}
+
+
+#include<stdlib.h>
+#include<stdio.h>
+#include<assert.h>
+#include<string.h>
+char *my_strrncat( char *str,const char *str1,int len)
+{
+	char *p = str;
+	assert(str != NULL && str1 != NULL);
+	while(len)
+   {
+	
+	   while(*str!='\0')
+	  {
+		  str++;
+	  }
+	   *str=*str1;
+	   str++;
+	   str1++;
+	   len--;
+
+	}
+	*str='\0';
+return p;
+
+}
+int main()
+{ 
+	int len = 0;
+	char *ret = NULL;
+	char arr[50] = "we are happy ";
+	char arr1[50] = "every day";
+	len = strlen(arr1);
+	ret = my_strrncat(arr,arr1,len);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+
+
