@@ -1,0 +1,100 @@
+1.字符串逆序（递归实现）。
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+char* reverse(char *str,char *str1)
+{
+	char ch = 0;
+	char *p = str;
+	if(*str != '\0') 
+	{
+		ch = *str;
+		*str = *str1;
+		*str1 = '\0';
+		reverse(str+1,str1-1);
+		*str1 = ch;
+	}
+	
+return p;
+	
+}
+
+
+int main()
+{
+	int len = 0;
+	char *ret = NULL;
+	char arr[100] = "abcdefjghjfgh";
+	len = strlen(arr);
+	ret = reverse(arr,(arr+len-1));
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+4.求第n个斐波那契数（非递归实现）。
+#include<stdio.h>
+#include<stdlib.h>
+int fib(int num)
+{
+	int n1 = 1;
+	int n2 = 1;
+	int n3 = n1;
+	if(num<=2)
+		return n3;
+	while(num>2)
+	{
+		n3 = n1+n2;
+		n1 = n2;
+		n2 = n3;
+		num--;
+	}
+	return n3;
+
+}
+int main()
+{
+	int num;
+	scanf("%d",&num);
+	printf("%d\n",fib(num));
+	system("pause");
+	return 0;
+
+}
+
+2.使用可变参数的方式，实现一个函数求人一个数字的最大值。
+	int Max(int n,...);
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdarg.h>
+int Max(int n,...)
+{
+	int max = 0;
+	int i = 0;
+	int arr[100]={0};
+	va_list arg;//char * arg
+	va_start(arg,n);//初始化arg变量，arg = (char*)&n+INTSIZEOF(n):此时的arg指向可变参数列表的第一个参数
+	for(i = 0;i<=n;i++)
+	{
+		arr[i] =  va_arg(arg, int);//依次取出可变参数列表中的参数，(*(int*)((arg += _INTSIZEOF(int))-_INTSIZEOF(int))
+
+
+	}
+	va_end(arg);//指针变量赋为空，（arg = (va_list)0）
+	max = arr[0];
+	for(i = 0;i < n;i++)
+	{
+		if(max < arr[i])
+			max = arr[i];
+	}
+	return max;
+}
+int main()
+{
+	
+	printf("%d\n",Max(2,1,2));
+	printf("%d\n",Max(3,1,2,3));
+	printf("%d\n",Max(5,1,4,6,3,8));
+	system("pause");
+	return 0;
+}
