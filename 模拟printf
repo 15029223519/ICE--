@@ -1,0 +1,132 @@
+1.模拟实现printf
+//my_printf("s ccc.","hello",'b','i','t');
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdarg.h>
+#include<string.h>
+void my_printf(char *ch,...)
+{
+	int len = 0;
+	char *str = NULL;
+	int i = 0;
+	va_list arg;
+	va_start(arg,ch);
+	len = strlen(ch);
+	
+	for(i = 0;i<len;i++)
+	{
+		if(*ch=='s')
+		{ str = (va_arg(arg,char*));
+			puts(str);
+		}
+      if(*ch=='c')
+	{
+		putchar(va_arg(arg,char));
+		
+	}
+	if(*ch=='\n')
+	{
+		puts("\t");
+	}
+	ch++;
+
+	}
+	}
+int main()
+{
+	char arr[] = "hello";
+	char c1 = 'b';
+	char c2 = 'i';
+	char c3 = 't';
+	char c4 = 'o';
+	char c5 = 'k';
+	my_printf("ccccc\n s", c1,c2,c3,c4,c5,arr);
+	my_printf("s ccccc",arr,c1,c2,c3,c4,c5 );
+	system("pause");
+	return 0;
+}
+
+2.利用main函数的参数实现一个计算器，
+输入test.exe -a 100 200执行加法
+输入test.exe -s 100 200执行减法
+输入test.exe -m 100 200执行乘法
+输入test.exe -d 100 200执行除法
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main(int argc,char *argv[])
+{   int num1 = 0;
+    int num2 = 0;
+	num1 = atoi(argv[3]);
+	num2 = atoi(argv[4]);
+	if(strcmp(argv[2],"-a")==0)
+    printf("%d",num1+num2);
+	if(strcmp(argv[2],"-s")==0)
+    printf("%d",num1-num2);
+     
+	if(strcmp(argv[2],"-m")==0)
+    printf("%d",num1*num2);
+     
+	if(strcmp(argv[2],"-d")==0 && (num2!=0))
+    printf("%d",num1/num2);
+     system("pause");
+	return 0;
+}
+
+3.编写一个函数实现n^k，使用递归实现
+#include<stdio.h>
+#include<stdlib.h>
+int fun(int num,int k)
+{
+	if(k!=0)
+	{
+		num*=fun(num,k-1);
+	  
+	}
+	else
+	{return 1;
+	}
+return num;
+
+}
+int main()
+{
+	int num = 0;
+	int k = 0;
+	scanf("%d %d",&num,&k);
+	printf("%d",fun(num,k));
+	system("pause");
+	return 0;
+}
+
+4. 写一个递归函数DigitSum(n)，输入一个非负整数，返回组成它的数字之和，例如，调用DigitSum(1729)，则应该返回1+7+2+9，它的和是19。
+
+#include<stdio.h>
+#include<stdlib.h>
+int DigitSum(int n)
+{
+	int sum = 0;
+	if((n/10)>0)
+	{
+	    sum=n%10;
+		sum+=DigitSum(n/10);
+		
+		}
+	else
+	{
+		return n;
+	}
+return sum;
+}
+int main()
+{
+	int num;
+	scanf("%d",&num);
+	DigitSum(num);
+	printf("%d",DigitSum(num));
+	system("pause");
+	return 0;
+
+}
+
