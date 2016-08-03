@@ -1,0 +1,298 @@
+//strlen--3
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+int my_strlen(const char *str)
+{
+	int count =0;
+	while(*str)
+	{
+		count++;
+		str++;
+	}
+	return count;
+}
+int my_strlen1(const char *str)
+{
+	int ret = 0;
+	if(*str != '\0')
+	{
+		ret+=my_strlen1(str+1)+1;
+	}
+  return ret;  
+}
+	
+	
+	
+
+int my_strlen2(const char *str)
+{
+	const char *str1 = str;
+	while(*str)
+	{
+		str++;
+	}
+	return str-str1;
+
+
+}
+int main()
+{
+	char arr[] = "dhfsjkk";
+	int len = my_strlen2(arr);
+	printf("len = %d",len);
+	system("pause");
+	return 0;
+}
+//strstr--1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+ char *my_strstr( char *dest,const char* src)
+ {
+	  char *p = NULL;
+	  const char *q = NULL;
+	 assert(dest!=NULL && src!=NULL);
+	 while(*dest)
+	 {   p = dest;
+	     q = src;
+		 while(*dest==*src)
+		 {  
+		    if(*src!='\0')
+			 src++;
+		     dest++;
+		 }
+		 if(*dest!=*src && *src=='\0')
+		      return p;
+		else if(*dest!=*src && *src!='\0')
+			
+		{
+			dest = p;
+		    src = q;
+		   if(*dest!='\0')
+			 dest++;
+		 }
+	 }
+return NULL;
+ }
+int main()
+{
+	char arr[]="we are happpy";
+	char *ret = my_strstr(arr,"pppy");
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+//strcpy---1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+char *my_strcpy(char *dest,const char *src)
+{
+	char *str = dest;
+	assert(dest!=NULL && src!=NULL);
+	while(*src)
+	{
+		*dest++=*src++;
+	}
+    *dest = *src;
+return str;
+}
+int main()
+{
+	char arr[50] = "we are happy.";
+	char *ret = my_strcpy(arr,"every day");
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+//strncpy---1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+char *my_strncpy(char *dest,const char *src,int count)
+{
+	char *str = dest;
+	assert(dest!=NULL && src!=NULL);
+	while(count && *src )
+	{
+		*dest++=*src++;
+		count--;
+
+	}
+	
+	while(count)
+	{
+		*dest = '\0';
+		dest++;
+		count--;
+
+	}
+	return str;
+}
+int main()
+{
+	char  *ret = NULL;
+	char arr[50] = "happydate";
+	ret = my_strncpy(arr,"family",6);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+//strcat----1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+char *my_strcat(char *dest,const char *src)
+{
+	char *str = dest;
+	assert(dest!=NULL && src!=NULL);
+	while(*dest)
+	{
+		dest++;
+	}
+	while(*src)
+	{ if(*src!='\0')
+		*dest++=*src++;
+	}
+	*dest=*src;
+return str;
+}
+int main()
+{
+	char arr[50] = "we are happy ";
+	char *ret = my_strcat(arr,"every day.");
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+
+//strncat---1
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+char *my_strncat(char *dest,const char *src,int count)
+{
+	char *str = dest;
+	assert(dest!=NULL && src!=NULL);
+	while(*dest)
+	{
+		dest++;
+	}
+	while(count && *src)
+	{
+		*dest++=*src++;
+		count--;
+	}
+	*dest = '\0';
+	while(count)
+	{
+		*dest = '\0';
+		dest++;
+	}
+	return str;
+}
+int main()
+{
+	char arr[50] = "we are happy ";
+	char *ret = my_strncat(arr,"every day",7);
+	printf("%s",ret);
+	system("pause");
+	return 0;
+}
+//strcmp---
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+int my_strcmp(const char *dest,const char *src)
+{
+	assert(dest!=NULL && src!=NULL);
+	while(*dest == *src)
+	{
+		if(*dest == '\0')
+			return 0;
+		dest++;
+		src++;
+	}
+
+	return *dest-*src;
+}
+int main()
+{
+	char *arr = "abcde";
+	int ret = my_strcmp(arr,"abcd");
+	printf("%d",ret);
+	system("pause");
+	return 0;
+
+}
+
+//strncmp
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+int my_strncmp(char *dest,char *src,int count)
+{
+	assert(dest!=NULL && src!=NULL);
+		while(count && *dest == *src)
+	{
+		if(*dest == '\0')
+			return 0;
+		dest++;
+		src++;
+		count--;
+	}
+   if(count==0)
+    return 0;
+
+   return *dest-*src;
+
+
+}
+int main()
+{
+	char *arr = "abcde";
+    int ret =my_strncmp(arr,"abcdf",6);
+	printf("%d",ret);
+	system("pause");
+	return 0;
+}
+//memcpy
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+void *my_memcpy(void *dest,const void *src,size_t count)
+{
+	void *ret = dest;
+
+	
+	while(count)
+	{ 
+		*(char*)dest = *(char*)src;
+	    dest = (char *)dest+1;
+		src = (char *)src+1;
+	    count--;
+	}
+	return ret;
+
+}
+int main()
+{
+	int i = 0;
+	int arr[10] = {0};
+	int arr1[10] = {0,1,2,3,4,5,6,7,8,9};
+    int len = sizeof(arr1)/sizeof(arr1[0]); 
+	 my_memcpy(arr,arr1,sizeof(arr1));
+	for(i = 0;i<len;i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	
+    
+	system("pause");
+	return 0;
+}
+
+
+
