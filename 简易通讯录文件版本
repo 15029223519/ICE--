@@ -1,0 +1,467 @@
+#define  _CRT_SECURE_NO_WARNINGS 1
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define SIZE 10
+int num = 0;
+int size = 0;
+FILE *stream;
+FILE *stream1;
+int num1;
+typedef  struct Tele
+	{
+		char name[15];
+		char sex[4];
+		int age;
+		char tele[11];
+		char ad[30];
+
+}T;
+T *ptr = NULL;
+T *tmp = NULL;
+T *tel = NULL;
+void menu()
+{
+	printf("**0.退出**\n");
+	printf("**1.删除指定联系人**\n");
+	printf("**2.查找指定联系人**\n");
+	printf("**3.修改指定联系人**\n");
+	printf("**4.显示全部**\n");
+	printf("**5.清空所有**\n");
+
+}
+void change_menu()
+{
+	printf("**0退出**\n");
+	printf("**1.修改姓名**\n");
+	printf("**2.修改性别**\n");
+	printf("**3.修改年龄**\n");
+	printf("**4.修改电话**\n");
+	printf("**5.修改地址**\n");
+
+}
+
+void space()
+{
+	ptr = (T *)malloc(SIZE*sizeof(T));
+
+	if(ptr==NULL)
+	{
+		perror("malloc");
+		return ;
+	}
+	memset(ptr,0,SIZE*sizeof(T));
+}
+void space_up()
+{
+	tmp = (T*)realloc(ptr,SIZE*sizeof(T));
+	if(tmp!=NULL)
+	{
+		ptr = tmp;
+		
+	}
+	
+
+
+}
+
+
+	
+void newrecord()
+{
+	
+	int a = 0;
+	
+	do {
+		
+printf("请输入您的联系人信息:>\n");
+printf("请输入联系人姓名\n>:");
+	scanf("%s",&ptr[num].name);
+	sex:printf("请输入联系人性别\n>:");
+	scanf("%s",&ptr[num].sex);
+	if((strcmp(ptr[num].sex,"female")==0)||(strcmp( ptr[num].sex ,"male")==0))
+	{
+		;
+	}
+	else
+	{
+		printf("您输入的性别有误\n");
+		goto sex;
+	}
+printf("请输入联系人年龄\n>:");
+	scanf("%d",&ptr[num].age);
+tel:printf("请输入联系人电话\n>:");
+	scanf("%s",&ptr[num].tele);
+	if(strlen(ptr[num].tele)>11)
+	{
+		printf("您输入的电话号码有误\n");
+		goto tel;
+	}
+printf("请输入联系人地址\n>:");
+	scanf("%s",&ptr[num].ad);
+	num++;
+	size++;
+	
+	if(size==SIZE)
+	{
+		space_up();
+		size = 0;
+	}
+   
+	printf("是否继续添加\n");
+	printf("****1.继续添加****\n****0.结束添加****\n");
+	scanf("%d",&a);
+	 }while(a);
+}
+
+
+void save()
+{
+	
+	if((stream = fopen("tele.out","wb"))!=NULL)
+	{int i;
+	for(i = 0;i< num ;i++){
+		num1= fwrite(&(ptr[i]),sizeof(T),1,stream);
+	   
+	     
+	}
+	
+	     fclose(stream);
+	}
+	
+}
+
+void sort_name()
+{
+	int i = 0;
+	int j = 0;
+	struct Tele s;
+	for(i = 0;i<num;i++)
+	{
+		for(j = 1;j<num-i;j++)
+		{
+			if(strcmp(ptr[j-1].name,ptr[j].name)>0)
+			{
+				s=ptr[j-1];
+			    ptr[j-1]=ptr[j];
+			    ptr[j] = s;
+				}
+		}
+	}
+	save();
+
+}
+void showall()
+{ 
+	int b = 0;
+	int i = 0;
+	tel = (T *)malloc(SIZE*sizeof(T));
+	if(num != 0)
+	{
+	printf("您的通讯录信息如下:>\n");
+	
+	
+	for(i = 0;i<num;i++)
+	{
+		if((stream = fopen("tele.out","rb"))!=NULL)
+		{
+		  fread(&tel[i],sizeof(T),1,stream);
+		  printf("name:>%s\n",tel[i].name);
+		  
+		  printf("sex:>%s\n",tel[i].sex);
+			
+		  printf("age:>%d\n",tel[i].age);
+			
+		  printf("tele:>%s\n",tel[i].tele);
+			
+		  printf("ad:>%s\n",tel[i].ad);
+
+
+		   }
+	    }
+	
+	
+		
+		
+	
+	fclose(stream);
+	free(tel);
+		
+	}
+
+else
+{
+	printf("您的通讯录没有记录,是否添加\n");
+	printf("****1.添加****\n****2.放弃添加****\n");
+	scanf("%d",&b);
+		if(b==1)
+		{
+			newrecord();
+		}
+		else
+			return;
+	}
+	}
+
+void _delete()
+{
+	int d = 0;
+	int e = 0;
+	char name[15];
+	char tele[11];
+	int i = 0;
+	int j = 0;
+	int a = 0;
+	printf("删除方式:>\n**1.按姓名删除**\n**2.按电话删除**\n");
+	scanf("%d",&d);
+	if(d==1)
+	{
+		printf("请输入需要删除的姓名:>\n");
+				scanf("%s",&name);
+			
+			for(i=0;i<num;i++)
+			{
+				if(strcmp(ptr[i].name,name)==0)
+				{
+					a = i;
+					printf("name:>%s\n",ptr[i].name);
+		            printf("sex:>%s\n",ptr[i].sex);
+		            printf("age:>%d\n",ptr[i].age);
+		            printf("tele:>%s\n",ptr[i].tele);
+		            printf("ad:>%s\n",ptr[i].ad);
+				}
+			}
+				printf("确认删除?:>\n**1.删除**\n**2.放弃删除**\n");
+				scanf("%d",&e);
+	            if(e==1)
+				{
+				for(j=a;j<num-1;j++)
+				{
+					ptr[j] = ptr[j+1];
+					
+					printf("删除成功");
+					
+					
+				}
+				num--;
+				showall();
+				
+				}
+				else
+					return;
+				
+			
+
+	}
+else if(d==2)
+	{
+			printf("请输入需要删除的电话:>\n");
+				scanf("%s",&tele);
+			
+			for(i=0;i<num;i++)
+			{
+				if(strcmp(ptr[i].tele,tele)==0)
+				{
+					a = i;
+					printf("您要删除的的是不是:>\n");
+					printf("name:>%s\n",ptr[i].name);
+		            printf("sex:>%s\n",ptr[i].sex);
+		            printf("age:>%d\n",ptr[i].age);
+		            printf("tele:>%s\n",ptr[i].tele);
+		            printf("ad:>%s\n",ptr[i].ad);
+				}
+				
+				printf("确认删除?:>\n**1.删除**\n**2.放弃删除**\n");
+				scanf("%d",&e);
+	             if(e==1)
+				{
+				for(j=a;j<num-1;j++)
+				{
+					ptr[j] = ptr[j+1];
+					
+					printf("删除成功\n");
+					
+				}
+				num--;
+				showall();
+					
+				}
+				else
+					return;
+	}
+	}
+	
+
+}
+void all_delete()
+{
+	int i = 0;
+	int f = 0;
+	printf("确认全部删除?:>\n**1.删除**\n**2.放弃删除**\n");
+	scanf("%d",&f);
+    if(f==1)
+	{
+	num=0;
+	}
+	printf("删除成功\n");
+	showall();
+
+}
+void search()
+{
+	int c = 0;
+	char name[15];
+	char tele[11];
+	int i = 0;
+	printf("查找方式:>\n**1.姓名查找**\n**2.电话查找**\n");
+	scanf("%d",&c);
+		if(c==1)
+		{
+			printf("请输入需要查找的姓名:>\n");
+				scanf("%s",&name);
+			
+			for(i=0;i<num;i++)
+			{
+				if(strcmp(ptr[i].name,name)==0)
+				{
+					printf("您要查找的是不是:>\n");
+					printf("name:>%s\n",ptr[i].name);
+		            printf("sex:>%s\n",ptr[i].sex);
+		            printf("age:>%d\n",ptr[i].age);
+		            printf("tele:>%s\n",ptr[i].tele);
+		            printf("ad:>%s\n",ptr[i].ad);
+					return;
+				}
+			}
+			if(i==num)
+			{
+				printf("您所查找的联系人不存在:>\n");
+			}
+
+		}
+		else if(c==2)
+		{
+			printf("请输入需要查找的电话号码:>\n");
+			scanf("%s",&tele);
+			for(i=0;i<num;i++)
+			{
+				if(strcmp(ptr[i].tele,tele)==0)
+				{
+					printf("您要查找的是不是:>\n");
+					printf("name:>%s\n",ptr[i].name);
+		            printf("sex:>%s\n",ptr[i].sex);
+		            printf("age:>%d\n",ptr[i].age);
+		            printf("tele:>%s\n",ptr[i].tele);
+		            printf("ad:>%s\n",ptr[i].ad);
+				}
+			}
+			if(i>num)
+			{
+				printf("您所查找的联系人不存在:>\n");
+			}
+		}
+}
+void change()
+{
+	char name[15];
+	   int g = 0;
+	   int i = 0;
+	   int j = 0;
+	   int n = 1;
+    printf("请输入需要修改的姓名:>\n");
+	scanf("%s",&name);
+	for(i=0;i<num;i++)
+	{
+	 if(strcmp(ptr[i].name,name)==0)
+	{ 
+		j = i;
+		printf("您要修改的是不是:>\n");
+	    printf("name:>%s\n",ptr[i].name);
+		printf("sex:>%s\n",ptr[i].sex);
+		printf("age:>%d\n",ptr[i].age);
+		printf("tele:>%s\n",ptr[i].tele);
+		printf("ad:>%s\n",ptr[i].ad);
+		
+		}
+	   
+    }
+	
+printf("是否确定修改\n**1.是**\n**2.否**\n");
+		scanf("%d",&g);
+		if(g==1)
+		{
+		
+		while(n)
+		{
+		change_menu();
+		scanf("%d",&n);
+		switch(n)
+
+		{
+		case 1:printf("请输入新的name:>\n");
+               scanf("%s",&ptr[j].name);
+			   break;
+		case 2:printf("请输入新的sex:>\n");
+               scanf("%s",&ptr[j].sex);
+			   break;
+	   case 3:printf("请输入新的age:>\n");
+               scanf("%d",&ptr[j].age);
+			   break;
+	  case 4:printf("请输入新的tele:>\n");
+               scanf("%s",&ptr[j].tele);
+			   break;
+	  case 5:printf("请输入新的ad:>\n");
+               scanf("%s",&ptr[j].ad);
+			   break;
+	  default:printf("您输入的操作有误");
+			}
+		showall();
+		}
+		}
+		else
+		return;
+	
+	
+
+		}
+
+
+
+
+
+int main()
+{
+	int input = 0;
+	space();
+	printf("请创建您的通讯录\n");
+	newrecord();
+	sort_name();
+     
+	 
+	do{
+		 menu();
+    scanf("%d",&input);
+	 
+		switch(input)
+
+		{
+		case 0: save();
+			break;
+		case 1:_delete();
+			   break;
+		case 2:search();
+			   break;
+	    case 3:change();
+			   break;
+	    case 4:showall();
+			   break;
+	  case 5:all_delete();
+			   break;
+	  default:save();
+		  printf("您输入的操作有误");
+			}
+		} while(input);
+	free(ptr);
+   system("pause");
+	return 0;
+}
