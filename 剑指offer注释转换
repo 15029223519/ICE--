@@ -1,0 +1,178 @@
+#define  _CRT_SECURE_NO_WARNINGS 1
+#ifndef __COMMENT_CONVERT__
+#define __COMMENT_CONVERT__//防止头文件重复引入
+#include<stdio.h>
+#include<stdlib.h>
+enum State
+{
+	Nul_state,
+	C_state,
+	Cpp_state,
+	End_state
+};
+
+void comment();//初始化函数
+void commentconvert(FILE *fpin,FILE *fpout,enum State *psta);
+void Do_Nulstate(FILE *fpin,FILE *fpout,enum stase *psta);
+void Do_Cstate(FILE *fpin,FILE *fpout,enum stase *psta);
+void Do_Cppstate(FILE *fpin,FILE *fpout,enum stase *psta);
+
+
+#endif
+#define  _CRT_SECURE_NO_WARNINGS 1
+#include"comment.h"
+void Do_Nulstate(FILE *fpin,FILE *fpout,enum State *psta)
+{
+	int second = 0;
+	int first = fgetc(fpin);
+	switch(first)
+	{
+	case '/':second = fgetc(fpin);
+		switch(second)
+		{
+		case '*':fputc('/',fpout);//进入c模式
+			     fputc('/',fpout);
+				 *psta = C_state;
+				 break;
+		case '/':fputc('/',fpout);//进入cpp模式
+			     fputc('/',fpout);
+				 *psta = Cpp_state;
+				 break;
+		default:fputc(second,fpout);
+			   *psta = Nul_state;  
+			   break;
+		}
+		break;
+	case EOF:*psta = End_state;
+		break;
+	default:fputc(first,fpout);
+		    *psta = Nul_state;
+		   break;
+	}
+}
+void Do_Cstate(FILE *fpin,FILE *fpout,enum stase *psta)
+{
+	int second = 0;
+	int first = fgetc(fpin);
+	switch(first)
+	{
+	case '*':second = fgetc(fpin);
+		switch(second)
+		{
+		case '/':fputc('\n',fpout);//c模式结束；
+			     *psta =Nul_state;
+				 break;
+		case '*':ungetc(second,fpin);//连续的**模式
+			     fputc(second,fpout);
+			     *psta =C_state;
+				break;
+		default:fputc(second,fpout);
+			   *psta = C_state;  
+			   break;
+		}
+		break;
+	case '/':*psta = C_state;  
+			  break;
+	case '\n':fputc('\n',fpout);//多行注释问题
+		      fputc('/',fpout);
+			  fputc('/',fpout);
+		      *psta = C_state;  
+			  break;
+    case EOF:*psta = End_state;//文档结束
+		     break;
+	default:fputc(first,fpout);
+		   *psta = C_state;
+		   break;
+	}
+
+}
+void Do_Cppstate(FILE *fpin,FILE *fpout,enum stase *psta)
+{
+	int second = 0;
+	int first = fgetc(fpin);
+	switch(first)
+	{
+	case '*':second = fgetc(fpin);
+		switch(second)
+		{
+		case '/':*psta =Cpp_state;
+				 break;
+		case '*':ungetc(second,fpin);
+			     fputc(second,fpout);
+			     *psta =Cpp_state;
+				break;
+		default:fputc(second,fpout);
+			   *psta = Cpp_state;  
+			   break;
+		}
+		break;
+	case '/':*psta = Cpp_state;  
+			  break;
+	case '\n':*psta = Nul_state; //cpp模式结束  
+			  break;
+	case EOF:*psta = End_state;
+		break;
+	default:fputc(first,fpout);
+		    *psta = Cpp_state;
+		   break;
+	}
+
+}
+
+void commentconvert(FILE *fpin,FILE *fpout,enum stase *psta)
+{
+    while(*psta != End_state)
+	{
+		switch(*psta)
+		{
+		case Nul_state:
+			Do_Nulstate(fpin,fpout,psta);
+			break;
+		case C_state:
+			Do_Cstate(fpin,fpout, psta);
+			break;
+		case Cpp_state:
+			Do_Cppstate(fpin,fpout, psta);
+			break;
+		default:
+			break;
+
+		}
+	}
+	printf("转换成功！\n");
+	
+}
+void comment()
+{
+	enum stase psta = Nul_state;
+	FILE *fpin = NULL;
+	FILE *fpout = NULL;
+	fpin = fopen("input.c","r");
+	if(fpin == NULL)
+	{
+		perror("open for read");
+		system("pause");
+		return ;
+	}
+	fpout = fopen("output.c","w");
+	if(fpout == NULL)
+	{
+		perror("open for write");
+		fclose(fpin);
+		system("pause");
+		return ;
+	}
+	commentconvert(fpin,fpout,&psta);
+	fclose(fpin);
+	fclose(fpout);
+
+}
+#define  _CRT_SECURE_NO_WARNINGS 1
+#include"comment.h"
+int main()
+{
+	comment();
+	system("pause");
+	return 0;
+}
+上一封 下一封« 返回
